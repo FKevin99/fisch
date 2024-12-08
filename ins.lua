@@ -103,9 +103,12 @@ spawn(function()
     end
 end)
 
--- Checkbox Functionality
-autoFishingCheckbox.MouseButton1Click:Connect(function()
-    autoFishingEnabled = not autoFishingEnabled
-    autoFishingCheckbox.Text = autoFishingEnabled and "Auto Fishing: ON" or "Auto Fishing: OFF"
-    autoFishingCheckbox.BackgroundColor3 = autoFishingEnabled and Color3.new(0, 0.6, 0) or Color3.new(0.3, 0.3, 0.3)
+-- Checkbox Functionality (Adapted for Mobile Compatibility)
+autoFishingCheckbox.InputBegan:Connect(function(input, gameProcessed)
+    if gameProcessed then return end
+    if input.UserInputType == Enum.UserInputType.Touch then
+        autoFishingEnabled = not autoFishingEnabled
+        autoFishingCheckbox.Text = autoFishingEnabled and "Auto Fishing: ON" or "Auto Fishing: OFF"
+        autoFishingCheckbox.BackgroundColor3 = autoFishingEnabled and Color3.new(0, 0.6, 0) or Color3.new(0.3, 0.3, 0.3)
+    end
 end)
