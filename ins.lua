@@ -10,7 +10,7 @@ local playergui = localplayer:WaitForChild("PlayerGui")
 
 -- Variables
 local autoFishingEnabled = false
-local shakeSpeed = 0.01 -- Shake sangat cepat
+local shakeSpeed = 0.1 -- Mengurangi kecepatan shake agar tidak terlalu cepat
 
 -- UI Creation
 local screenGui = Instance.new("ScreenGui")
@@ -69,9 +69,11 @@ local function shake()
         local button = safezone and safezone:FindFirstChild("button")
 
         if button and button.Visible then
+            -- Cek apakah button benar-benar ada
             local x = button.AbsolutePosition.X + button.AbsoluteSize.X / 2
             local y = button.AbsolutePosition.Y + button.AbsoluteSize.Y / 2
             local vim = game:GetService("VirtualInputManager")
+            -- Kirim event klik mouse untuk shake
             vim:SendMouseButtonEvent(x, y, 0, true, game, 1)
             vim:SendMouseButtonEvent(x, y, 0, false, game, 1)
         end
@@ -103,12 +105,22 @@ spawn(function()
     end
 end)
 
--- Checkbox Functionality (Adapted for Mobile Compatibility)
-autoFishingCheckbox.InputBegan:Connect(function(input, gameProcessed)
-    if gameProcessed then return end
-    if input.UserInputType == Enum.UserInputType.Touch then
+-- Fungsi untuk menangani klik pada checkbox
+if game:GetService("UserInputService").TouchEnabled then
+    -- Jika pada perangkat mobile, gunakan InputBegan
+    autoFishingCheckbox.InputBegan:Connect(function(input, gameProcessed)
+        if gameProcessed then return end
+        if input.UserInputType == Enum.UserInputType.Touch then
+            autoFishingEnabled = not autoFishingEnabled
+            autoFishingCheckbox.Text = autoFishingEnabled and "Auto Fishing: ON" or "Auto Fishing: OFF"
+            autoFishingCheckbox.BackgroundColor3 = autoFishingEnabled and Color3.new(0, 0.6, 0) or Color3.new(0.3, 0.3, 0.3)
+        end
+    end)
+else
+    -- Jika pada PC, gunakan MouseButton1Click untuk klik mouse
+    autoFishingCheckbox.MouseButton1Click:Connect(function()
         autoFishingEnabled = not autoFishingEnabled
         autoFishingCheckbox.Text = autoFishingEnabled and "Auto Fishing: ON" or "Auto Fishing: OFF"
         autoFishingCheckbox.BackgroundColor3 = autoFishingEnabled and Color3.new(0, 0.6, 0) or Color3.new(0.3, 0.3, 0.3)
-    end
-end)
+    end)
+end
