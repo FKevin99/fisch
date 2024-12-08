@@ -10,7 +10,7 @@ local playergui = localplayer:WaitForChild("PlayerGui")
 
 -- Variables
 local autoFishingEnabled = false
-local shakeSpeed = 0.1 -- Mengurangi kecepatan shake agar tidak terlalu cepat
+local shakeSpeed = 0.05 -- Mengurangi kecepatan shake agar tidak terlalu cepat
 
 -- UI Creation
 local screenGui = Instance.new("ScreenGui")
